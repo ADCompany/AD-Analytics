@@ -52,7 +52,14 @@ public:
 		static CSmartContainer* create(int nSize, T const& value);
 	template<typename T>
 		static CSmartContainer* create( QVector<T> const& aData );
+	//
+	// Non Template Creators
+	//
+	static CSmartContainer* create( t_EDataType eType );
+	static CSmartContainer* create( t_EDataType eType, int nSize );
+	// returns copy of given container
 	static CSmartContainer* create( CSmartContainer const* pOther );
+
 
 public:
     //
@@ -66,7 +73,7 @@ public:
 	// count of unique data
 	inline int getUniqueDataCount() const;
 	// size
-	inline  int getSize() const;
+	int getSize() const;
 	// is empty
 	inline bool isEmpty() const;
 	// remove
@@ -155,7 +162,7 @@ CSmartContainer* CSmartContainer::create(int nSize)
 {
 	if (!isValidType<T>())
 		return NULL;
-	return dynamic_cast<CSmartContainer*>( new CDataContainer<T>( nSize ) );
+	return dynamic_cast<CSmartContainer*>( new CDataContainer<T>( nSize, T() ) );
 }
 // create() [3]
 template<typename T>
@@ -172,25 +179,6 @@ CSmartContainer* CSmartContainer::create( QVector<T> const& aData )
 	if (!isValidType<T>())
 		return NULL;
 	return dynamic_cast<CSmartContainer*>( new CDataContainer<T>( aData ) );
-}
-// create() [5]
-inline CSmartContainer* CSmartContainer::create(CSmartContainer const* pOther)
-{
-	if ( !pOther )
-		return NULL;
-	switch ( pOther->getType() )
-	{
-	case eDT_Bool:
-		{
-			CDataContainer<bool> const* pContainer = static_cast<CDataContainer<bool> const*>(pOther);
-			return dynamic_cast<CSmartContainer*>(new CDataContainer<bool>(*pContainer));
-			break;
-		}
-	// TODO for other types
-	default:
-		return NULL;
-		break;
-	}
 }
 
 //
@@ -256,7 +244,7 @@ inline QVector<T> CSmartContainer::getDataVector( t_IndexMap const& indexMap ) c
 template<typename T>
 inline T CSmartContainer::getData(int index) const
 {
-	Q_ASSERT(typeToEnum<T>() == m_eDataType);
+	AD_ASSERT( typeToEnum<T>() == m_eDataType, "Types dont match!");
 	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
 	return pContainer->getData( index );
 }
