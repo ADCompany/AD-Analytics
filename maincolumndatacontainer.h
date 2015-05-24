@@ -30,7 +30,7 @@ private:
     //
     //  Content
     //
-    t_ListMap m_mUniqueData;
+    t_ListMap m_mapUniqueData;
     t_IteratorVector m_aIteratorVector;
 
 //private:
@@ -164,7 +164,7 @@ inline CDataContainer<T>::CDataContainer( int size, T const& value )
     m_eDataType = typeToEnum<T>();
     if( size )
     {
-        t_Iterator it = m_mUniqueData.insert( value, QLinkedList<int> () );
+        t_Iterator it = m_mapUniqueData.insert( value, QLinkedList<int> () );
         while( size )
         {
             --size;
@@ -184,9 +184,9 @@ inline CDataContainer<T>::CDataContainer( QVector<T> const& aValue )
     {
         for(int i = 0; i<size; ++i)
         {
-            m_aIteratorVector[i] = m_mUniqueData.find( aValue[i] );
-            if(m_aIteratorVector[i] == m_mUniqueData.end())
-                m_aIteratorVector[i] = m_mUniqueData.insert( aValue[i], QLinkedList<int>() );
+            m_aIteratorVector[i] = m_mapUniqueData.find( aValue[i] );
+            if(m_aIteratorVector[i] == m_mapUniqueData.end())
+                m_aIteratorVector[i] = m_mapUniqueData.insert( aValue[i], QLinkedList<int>() );
             m_aIteratorVector[i].value().push_front( i );
         }
     }
@@ -194,12 +194,12 @@ inline CDataContainer<T>::CDataContainer( QVector<T> const& aValue )
 
 template <typename T>
 inline CDataContainer<T>::CDataContainer( CDataContainer<T> const& other )
-    : m_mUniqueData( other.m_mUniqueData ),
+    : m_mapUniqueData( other.m_mapUniqueData ),
       m_aIteratorVector( other.m_aIteratorVector.size() )
 {
     m_eDataType = other.m_eDataType;
-    t_Iterator it = m_mUniqueData.begin();
-    while(it != m_mUniqueData.end())
+    t_Iterator it = m_mapUniqueData.begin();
+    while(it != m_mapUniqueData.end())
     {
         QLinkedList<int>::iterator lstIt = it.value().begin();
         while(lstIt != it.value().end())
@@ -215,8 +215,8 @@ inline CDataContainer<T>::CDataContainer( CDataContainer<T> const& other )
 template <typename T>
 inline int CDataContainer<T>::getIndexOf( T const& value ) const
 {
-    t_ConstIterator it = m_mUniqueData.find( value );
-    if(it == m_mUniqueData.end())
+    t_ConstIterator it = m_mapUniqueData.find( value );
+    if(it == m_mapUniqueData.end())
         return -1;
     QLinkedList<int>::const_iterator lstIt = it.value().begin();
     int nTemp = *lstIt;
@@ -232,8 +232,8 @@ inline int CDataContainer<T>::getIndexOf( T const& value ) const
 template <typename T>
 inline t_IndexMap CDataContainer<T>::getIndicesOf( T const& value ) const
 {
-    t_ConstIterator it = m_mUniqueData.find( value );
-    if(it == m_mUniqueData.end())
+    t_ConstIterator it = m_mapUniqueData.find( value );
+    if(it == m_mapUniqueData.end())
     {
         t_IndexMap tempIndexMap;
         return tempIndexMap;
@@ -254,10 +254,10 @@ inline void CDataContainer<T>::append( T const& value, int count )
 {
     int size = m_aIteratorVector.size();
     Q_ASSERT( count>=0 && ( count + size )<=MAX_INDEX );
-    t_Iterator it = m_mUniqueData.find( value );
+    t_Iterator it = m_mapUniqueData.find( value );
     m_aIteratorVector.resize( count + size );
-    if(it == m_mUniqueData.end())
-        it =  m_mUniqueData.insert( value, QLinkedList<int>() );
+    if(it == m_mapUniqueData.end())
+        it =  m_mapUniqueData.insert( value, QLinkedList<int>() );
     for( int i = count + size-1; i>=size; --i)
     {
         it.value().push_front( i );
@@ -271,9 +271,9 @@ inline void CDataContainer<T>::append( QVector<T> const& aValue )
     m_aIteratorVector.resize( aValue.size() + m_aIteratorVector.size() );
     for(int i = 0; i<aValue.size(); ++i)
     {
-        m_aIteratorVector[m_aIteratorVector.size()+i] = m_mUniqueData.find( aValue[i] );
-        if(m_aIteratorVector[m_aIteratorVector.size()+i] == m_mUniqueData.end())
-            m_aIteratorVector[m_aIteratorVector.size()+i] = m_mUniqueData.insert( aValue[i], QLinkedList<int>() );
+        m_aIteratorVector[m_aIteratorVector.size()+i] = m_mapUniqueData.find( aValue[i] );
+        if(m_aIteratorVector[m_aIteratorVector.size()+i] == m_mapUniqueData.end())
+            m_aIteratorVector[m_aIteratorVector.size()+i] = m_mapUniqueData.insert( aValue[i], QLinkedList<int>() );
         m_aIteratorVector[m_aIteratorVector.size()+i].value().push_front( m_aIteratorVector.size()+i );
     }
 }
@@ -290,9 +290,9 @@ inline void CDataContainer<T>::insert( T const& value, int index, int count )
             ++lstIt;
         *lstIt+=count;
     }
-    t_Iterator it = m_mUniqueData.find( value );
-    if(it == m_mUniqueData.end())
-        it = m_mUniqueData.insert( value, QLinkedList<int>() );
+    t_Iterator it = m_mapUniqueData.find( value );
+    if(it == m_mapUniqueData.end())
+        it = m_mapUniqueData.insert( value, QLinkedList<int>() );
     m_aIteratorVector.insert( index, count, it );
     while(count)
     {
@@ -313,12 +313,12 @@ inline void CDataContainer<T>::insert( const QVector<T>& aValue, int index )
             ++lstIt;
         *lstIt+=aValue.size();
     }
-    m_aIteratorVector.insert( m_aIteratorVector.size(), aValue.size(), m_mUniqueData.end() );
+    m_aIteratorVector.insert( m_aIteratorVector.size(), aValue.size(), m_mapUniqueData.end() );
     for(int i = 0; i<aValue.size(); ++i)
     {
-        t_Iterator it = m_mUniqueData.find( aValue[i] );
-        if(it == m_mUniqueData.end())
-            it = m_mUniqueData.insert( aValue[i] );
+        t_Iterator it = m_mapUniqueData.find( aValue[i] );
+        if(it == m_mapUniqueData.end())
+            it = m_mapUniqueData.insert( aValue[i], );
         m_aIteratorVector[index + i] = it;
     }
 }
@@ -339,13 +339,12 @@ inline T CDataContainer<T>::getData( int index ) const
 template <typename T>
 inline QVector<T> CDataContainer<T>::getUniqueDataVector( ) const
 {
-    QVector<T> aUniqueDataVector( m_mUniqueData.size() );
-    t_ConstIterator it = m_mUniqueData.begin();
+    QVector<T> aUniqueDataVector( m_mapUniqueData.size() );
+    t_ConstIterator it = m_mapUniqueData.begin();
     int i = 0;
-    while( it!=m_mUniqueData.end() )
+	for (; it != m_mapUniqueData.end(); it++)
     {
-        aUniqueDataVector[i] = it.key();
-        ++i;
+        aUniqueDataVector[i++] = it.key();
     }
     return aUniqueDataVector;
 }
@@ -372,12 +371,12 @@ template <typename T>
 inline void CDataContainer<T>::setData( int index, T const& value )
 {
     Q_ASSERT( index>=0 && index<m_aIteratorVector.size() );
-    t_Iterator it = m_mUniqueData.find( value );
+    t_Iterator it = m_mapUniqueData.find( value );
     if(it == m_aIteratorVector[index])
         return;
     m_aIteratorVector[index].value().removeOne( index );
-    if(it == m_mUniqueData.end())
-        it = m_mUniqueData.insert( value, QLinkedList<int>() );
+    if(it == m_mapUniqueData.end())
+        it = m_mapUniqueData.insert( value, QLinkedList<int>() );
     m_aIteratorVector[index] = it;
     it.value().push_front( index );
 }
@@ -389,15 +388,15 @@ inline void CDataContainer<T>::removeByIndex( int index )
     t_Iterator it = m_aIteratorVector[index];
     it.value().removeOne( index );
     if(it.value().isEmpty())
-        m_mUniqueData.erase(it);
+        m_mapUniqueData.erase(it);
     m_aIteratorVector.remove( index );
 }
 
 template <typename T>
 inline void CDataContainer<T>::removeByValue( T const& value )
 {
-    t_Iterator it = m_mUniqueData.find( value );
-    if(it == m_mUniqueData.end())
+    t_Iterator it = m_mapUniqueData.find( value );
+    if(it == m_mapUniqueData.end())
         return;
     QLinkedList<int>::iterator lstIt = it.value().begin();
     while(lstIt != it.value().end())
@@ -405,7 +404,7 @@ inline void CDataContainer<T>::removeByValue( T const& value )
         m_aIteratorVector.remove( *lstIt );
         ++lstIt;
     }
-    m_mUniqueData.erase( it );
+    m_mapUniqueData.erase( it );
 }
 
 template <typename T>
@@ -414,17 +413,18 @@ inline void CDataContainer<T>::changeUniqueData( int index, T const& value )
     Q_ASSERT( index>=0 && index<m_aIteratorVector.size() );
     if(m_aIteratorVector[index].key() == value)
         return;
-    t_Iterator it = m_mUniqueData.find( value );
-    if(it == m_mUniqueData.end())
-        it = m_mUniqueData.insert( value, QLinkedList<int>() );
+    t_Iterator it = m_mapUniqueData.find( value );
+    if(it == m_mapUniqueData.end())
+        it = m_mapUniqueData.insert( value, QLinkedList<int>() );
     t_Iterator indexIt = m_aIteratorVector[index];
     QLinkedList<int>::iterator lstIt = m_aIteratorVector[index].value().begin();
-    while(lstIt != m_aIteratorVector[index].value().end())
+    while(lstIt != indexIt.value().end())
     {
         it.value().push_front( *lstIt );
         m_aIteratorVector[*lstIt] = it;
+		lstIt++;
     }
-    m_mUniqueData.erase(indexIt);
+    m_mapUniqueData.erase(indexIt);
 }
 
 template <typename T>
@@ -439,14 +439,14 @@ inline void CDataContainer<T>::removeByIndex( t_IndexMap const& indexMap )
     {
         m_aIteratorVector[indexMap[i]].value().removeOne( indexMap[i] );
         if( m_aIteratorVector[indexMap[i]].value().isEmpty() )
-            m_mUniqueData.erase( m_aIteratorVector[indexMap[i]] );
+            m_mapUniqueData.erase( m_aIteratorVector[indexMap[i]] );
     }
     for(int i = 0; i<size; ++i)
-        m_aIteratorVector[indexMap[i]] = m_mUniqueData.end();
+        m_aIteratorVector[indexMap[i]] = m_mapUniqueData.end();
     size = m_aIteratorVector.size();
     for(int i = 0; i<size; ++i)
     {
-        if(m_aIteratorVector[i] == m_mUniqueData.end())
+        if(m_aIteratorVector[i] == m_mapUniqueData.end())
             m_aIteratorVector.remove( i );
     }
 }
@@ -461,8 +461,8 @@ inline int CDataContainer<T>::getOccurrenceByIndex( int index ) const
 template <typename T>
 inline int CDataContainer<T>::getOccurrenceByValue( T const& value ) const
 {
-    t_ConstIterator it = m_mUniqueData.find( value );
-    if(it == m_mUniqueData.end())
+    t_ConstIterator it = m_mapUniqueData.find( value );
+    if(it == m_mapUniqueData.end())
         return 0;
     return it.value().size();
 }
@@ -470,7 +470,7 @@ inline int CDataContainer<T>::getOccurrenceByValue( T const& value ) const
 template <typename T>
 inline int CDataContainer<T>::getUniqueDataCount()  const
 {
-    return m_mUniqueData.size();
+    return m_mapUniqueData.size();
 }
 
 template <typename T>
@@ -489,9 +489,9 @@ template <typename T>
 inline t_IndexMap CDataContainer<T>::sortAscending() const
 {
     t_IndexMap tempIndexMap( m_aIteratorVector.size() );
-    t_ConstIterator it = m_mUniqueData.begin();
+    t_ConstIterator it = m_mapUniqueData.begin();
     int i = 0;
-    while(it != m_mUniqueData.end())
+    while(it != m_mapUniqueData.end())
     {
         QLinkedList<int>::const_iterator lstIt = it.value().begin();
         while(lstIt != it.value().end())
@@ -508,9 +508,9 @@ inline t_IndexMap CDataContainer<T>::sortAscending() const
 template <typename T>
 inline void CDataContainer<T>::internalSortAscending()
 {
-    t_Iterator it = m_mUniqueData.begin();
+    t_Iterator it = m_mapUniqueData.begin();
     int i = 0;
-    while(it != m_mUniqueData.end())
+    while(it != m_mapUniqueData.end())
     {
         int size = it.value().size();
         while(size)
@@ -529,9 +529,9 @@ inline t_IndexMap CDataContainer<T>::sortDescending() const
     t_IndexMap tempIndexMap( m_aIteratorVector.size() );
     if(tempIndexMap.isEmpty())
         return tempIndexMap;
-    t_ConstIterator it = m_mUniqueData.end();
+    t_ConstIterator it = m_mapUniqueData.end();
     int i = 0;
-    while(it != m_mUniqueData.begin())
+    while(it != m_mapUniqueData.begin())
     {
         --it;
         QLinkedList<int>::const_iterator lstIt = it.value().begin();
@@ -550,9 +550,9 @@ inline void CDataContainer<T>::internalSortDescending()
 {
     if(m_aIteratorVector.isEmpty())
         return;
-    t_Iterator it = m_mUniqueData.end();
+    t_Iterator it = m_mapUniqueData.end();
     int i = 0;
-    while(it != m_mUniqueData.begin())
+    while(it != m_mapUniqueData.begin())
     {
         --it;
         int size = it.value().size();
@@ -569,7 +569,7 @@ template <typename T>
 inline void CDataContainer<T>::clear()
 {
     m_aIteratorVector.clear();
-    m_mUniqueData.clear();
+    m_mapUniqueData.clear();
 }
 
 template <typename T>

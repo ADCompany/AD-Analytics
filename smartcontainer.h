@@ -67,26 +67,26 @@ public:
     //
 	
 	// returns data type
-	inline t_EDataType getType() const;
+	inline t_EDataType getType() const;  // [TESTED]
 	// returns occurrence of value in given index
-	inline int getOccurrenceByIndex(int index) const;
+	int getOccurrenceByIndex(int index) const; // [TESTED]
 	// count of unique data
-	inline int getUniqueDataCount() const;
+	int getUniqueDataCount() const;  // [TESTED]
 	// size
-	int getSize() const;
+	int getSize() const; // [TESTED]
 	// is empty
-	inline bool isEmpty() const;
+	bool isEmpty() const; // [TESTED]
 	// remove
-	inline void removeByIndex(int nIndex );
-	inline void removeByIndex(t_IndexMap const& indexMap);
+	void removeByIndex(int nIndex ); // [TESTED]
+	void removeByIndex(t_IndexMap const& indexMap); // [CRASH]
 	
-	// clear
-	inline void clear(); 
+	// clear 
+	void clear(); // [TESTED]
 	
-	// internaly sorts the container
-	inline void internalSort(bool isAscending = true);
+	// internaly sorts the  container
+	void internalSort(bool isAscending = true); // [TESTED]
 	// returns index map of sorted data
-	inline t_IndexMap sort(bool isAscending = true) const;
+	t_IndexMap sort(bool isAscending = true) const; // [CRASH]
 
 	// serialise & deserialise
 	inline bool serialise( QDataStream& );
@@ -98,42 +98,42 @@ public:
 
 	// returns first index of given value
 	template<typename T>
-		inline int getIndexOf(const T& value) const;
+		inline int getIndexOf(const T& value) const; // [LOGIC ERROR]
 	// returns index map of indices for given value
 	template<typename T>
-        inline t_IndexMap getIndicesOf( const T& value ) const;
+        inline t_IndexMap getIndicesOf( const T& value ) const; // [LOGIC ERROR]
 	// returns occurrence of given value
 	template<typename T>
-		inline int getOccurrenceByValue( const T& value ) const;
+		inline int getOccurrenceByValue( const T& value ) const; // [TESTED]
 	// returns vector of unique data
 	template<typename T>
-		inline QVector<T> getUniqueDataVector() const;
-	// returns data vector of corresponding index map
-	template<typename T>
-		inline QVector<T> getDataVector( t_IndexMap const& indexMap = t_IndexMap() ) const;
+		inline QVector<T> getUniqueDataVector() const;  // [TESTED]
+	// returns data vector of corresponding index map 
+	template<typename T> 
+		inline QVector<T> getDataVector( t_IndexMap const& indexMap = t_IndexMap() ) const; // [TESTED]
 	// get data
 	template<typename T>
-		inline T getData(int index) const;
+		inline T getData(int index) const; // [TESTED]
 	// set data
 	template<typename T>
-		inline void setData(int index, const T& value);
+		inline void setData(int index, const T& value);  // [TESTED]
 	// changes unique data in given index to given value
 	template<typename T>
-		inline void changeUniqueData(int index, const T &value);
+		inline void changeUniqueData(int index, const T &value);  // [TESTED]
 	// insert
 	template<typename T>
-		inline void insert(const T& value, int index, int count = 1);
+		inline void insert(const T& value, int index, int count = 1); // [TESTED]
 	template<typename T>
-		inline void insert(const QVector<T>& aValue, int index);
-	// append [TESTED]
+		inline void insert(const QVector<T>& aValue, int index); // [CRASH]
+	// append
 	template<typename T>
-		inline void append(const T &value, int count = 1);
-	// append a vector [BUG]
+		inline void append(const T &value, int count = 1); // [TESTED]
+	// append a vector 
 	template<typename T>
-		inline void append(const QVector<T>& aValue);
+		inline void append(const QVector<T>& aValue); // [CRASH]
 	// removes all items equal to given value 
 	template<typename T>
-		inline void removeByValue(const T& value);
+		inline void removeByValue(const T& value); // [LOGIC ERROR] & [CRASH]
 protected:
 	//
 	//  Content
