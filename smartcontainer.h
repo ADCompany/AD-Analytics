@@ -125,10 +125,10 @@ public:
 		inline void insert(const T& value, int index, int count = 1);
 	template<typename T>
 		inline void insert(const QVector<T>& aValue, int index);
-	// append
+	// append [TESTED]
 	template<typename T>
 		inline void append(const T &value, int count = 1);
-	// append a vector
+	// append a vector [BUG]
 	template<typename T>
 		inline void append(const QVector<T>& aValue);
 	// removes all items equal to given value 
@@ -254,7 +254,7 @@ template<typename T>
 inline void CSmartContainer::setData(int index, const T& value)
 {
 	Q_ASSERT(typeToEnum<T>() == m_eDataType);
-	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
+	CDataContainer<T>* pContainer = static_cast< CDataContainer<T>* >(this);
 	return pContainer->setData( index, value );
 }
 
@@ -263,7 +263,7 @@ template<typename T>
 inline void CSmartContainer::changeUniqueData(int index, const T &value)
 {
 	Q_ASSERT(typeToEnum<T>() == m_eDataType);
-	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
+	CDataContainer<T>* pContainer = static_cast< CDataContainer<T>* >(this);
 	return pContainer->changeUniqueData( index, value );
 }
 
@@ -272,7 +272,7 @@ template<typename T>
 inline void CSmartContainer::insert(const T& value, int index, int count )
 {
 	Q_ASSERT(typeToEnum<T>() == m_eDataType);
-	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
+	CDataContainer<T>* pContainer = static_cast< CDataContainer<T>* >(this);
 	return pContainer->insert( value, index, count );
 }
 // insert()
@@ -280,7 +280,7 @@ template<typename T>
 inline void CSmartContainer::insert(const QVector<T>& aValue, int index)
 {
 	Q_ASSERT(typeToEnum<T>() == m_eDataType);
-	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
+	CDataContainer<T>* pContainer = static_cast< CDataContainer<T>* >(this);
 	return pContainer->insert( aValue, index);
 }
 // append()
@@ -288,7 +288,7 @@ template<typename T>
 inline void CSmartContainer::append(const T &value, int count)
 {
 	Q_ASSERT(typeToEnum<T>() == m_eDataType);
-	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
+	CDataContainer<T>* pContainer = static_cast< CDataContainer<T>* >(this);
 	return pContainer->append( value, count );
 }
 // append()
@@ -296,7 +296,7 @@ template<typename T>
 inline void CSmartContainer::append(const QVector<T>& aValue)
 {
 	Q_ASSERT(typeToEnum<T>() == m_eDataType);
-	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
+	CDataContainer<T>* pContainer = static_cast< CDataContainer<T>* >(this);
 	return pContainer->append( aValue );
 }
 // removeByValue()
@@ -304,7 +304,7 @@ template<typename T>
 inline void CSmartContainer::removeByValue(const T& value)
 {
 	Q_ASSERT(typeToEnum<T>() == m_eDataType);
-	CDataContainer<T> const* pContainer = static_cast< CDataContainer<T> const* >(this);
+	CDataContainer<T>* pContainer = static_cast< CDataContainer<T>* >(this);
 	return pContainer->removeByValue( value );
 }
 ////////////////////////////////////////////////////////////////////////////////
