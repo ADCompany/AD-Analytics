@@ -407,7 +407,7 @@ inline void CDataContainer<T>::removeByValue( T const& value )
         m_aIteratorVector[*lstIt] = m_mapUniqueData.end();
         ++lstIt;
     }
-    for(int i = m_aIteratorVector.size()-1-1; i>=0; --i)
+    for(int i = m_aIteratorVector.size()-1; i>=0; --i)
     {
         if(m_aIteratorVector[i] == m_mapUniqueData.end())
         {
