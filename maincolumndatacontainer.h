@@ -320,7 +320,8 @@ inline void CDataContainer<T>::insert( const QVector<T>& aValue, int index )
     {
         t_Iterator it = m_mapUniqueData.find( aValue[i] );
         if(it == m_mapUniqueData.end())
-            it = m_mapUniqueData.insert( aValue[i] );
+            it = m_mapUniqueData.insert( aValue[i], QLinkedList<int>() );
+        it.value().push_front( index + i );
         m_aIteratorVector[index + i] = it;
     }
 }
@@ -404,14 +405,14 @@ inline void CDataContainer<T>::removeByValue( T const& value )
     while(lstIt != it.value().end())
     {
         m_aIteratorVector[*lstIt] = m_mapUniqueData.end();
+        ++lstIt;
     }
     int size = m_aIteratorVector.size();
-    for(int i = 0; i<size; ++i)
+    for(int i = size; i>=0; --i)
     {
         if(m_aIteratorVector[i] == m_mapUniqueData.end())
         {
             m_aIteratorVector.remove( i );
-            --size;
         }
     }
     m_mapUniqueData.erase( it );
