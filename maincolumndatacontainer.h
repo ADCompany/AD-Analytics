@@ -407,8 +407,7 @@ inline void CDataContainer<T>::removeByValue( T const& value )
         m_aIteratorVector[*lstIt] = m_mapUniqueData.end();
         ++lstIt;
     }
-    int size = m_aIteratorVector.size();
-    for(int i = size-1; i>=0; --i)
+    for(int i = m_aIteratorVector.size()-1-1; i>=0; --i)
     {
         if(m_aIteratorVector[i] == m_mapUniqueData.end())
         {
@@ -458,13 +457,11 @@ inline void CDataContainer<T>::removeByIndex( t_IndexMap const& indexMap )
     for(int i = 0; i<size; ++i)
         m_aIteratorVector[indexMap[i]] = m_mapUniqueData.end();
     // Removing from iterators equal to end()
-    size = m_aIteratorVector.size();
-    for(int i = 0; i<size; ++i)
+    for(int i = m_aIteratorVector.size()-1; i>=0; ++i)
     {
         if(m_aIteratorVector[i] == m_mapUniqueData.end())
         {
             m_aIteratorVector.remove( i );
-            --size;
         }
     }
 }
@@ -600,4 +597,5 @@ inline bool CDataContainer<T>::isEmpty() const
 
 #endif // MAIN_COLUMN_DATA_CONTAINER_H
 /* End of file */
+
 
